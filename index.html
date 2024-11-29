@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleet Savings Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #0d6efd, #121212);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .calculator {
+            background: #1e1e2e;
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+            border: 3px solid #0d6efd;
+        }
+
+        h2 {
+            color: #4caf50;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #4caf50, #0d6efd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .input-field {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #cccccc;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #2b2b3d;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 10px #0d6efd;
+        }
+
+        button {
+            background: linear-gradient(90deg, #007bff, #0d6efd);
+            color: #ffffff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #0056b3, #007bff);
+            transform: scale(1.05);
+        }
+
+        .result-card {
+            display: none;
+            background: #1e1e2e;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .money {
+            position: absolute;
+            width: 50px;
+            animation: drop 3s linear infinite;
+            z-index: 10;
+            top: -100px;
+        }
+
+        @keyframes drop {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h2>Fleet Savings Calculator</h2>
+        <div class="input-field">
+            <label for="fleet-size">Fleet Size:</label>
+            <input type="number" id="fleet-size" placeholder="Enter fleet size">
+        </div>
+        <div class="input-field">
+            <label for="cost-per-vehicle">Annual Upkeep Cost per Vehicle ($):</label>
+            <input type="number" id="cost-per-vehicle" placeholder="Enter upkeep cost per vehicle">
+        </div>
+        <div class="input-field">
+            <label for="savings-percentage">Savings Percentage (15%-30%):</label>
+            <input type="number" id="savings-percentage" placeholder="Enter savings percentage">
+        </div>
+        <button onclick="calculateSavings()">Calculate Savings</button>
+        <audio id="click-sound" src="https://www.soundjay.com/button/sounds/button-09.mp3"></audio>
+        <audio id="success-sound" src="https://drive.google.com/uc?export=download&id=1STwXgHEmVQR0U5fMDtw1FqIvcoPROz_k"></audio>
+        <div class="result-card" id="result-card">
+            <h3>Estimated Annual Savings</h3>
+            <p id="result-text"></p>
+        </div>
+    </div>
+    <script>
+        function calculateSavings() {
+            const fleetSize = document.getElementById('fleet-size').value;
+            const costPerVehicle = document.getElementById('cost-per-vehicle').value;
+            const savingsPercentage = document.getElementById('savings-percentage').value;
+            const resultCard = document.getElementById('result-card');
+            const resultText = document.getElementById('result-text');
+            const clickSound = document.getElementById('click-sound');
+            const successSound = document.getElementById('success-sound');
+
+            clickSound.play(); // Play click sound
+
+            if (fleetSize && costPerVehicle && savingsPercentage) {
+                const totalSavings = fleetSize * costPerVehicle * (savingsPercentage / 100);
+                resultText.innerText = `Estimated Annual Savings: $${totalSavings.toLocaleString()}`;
+                resultCard.style.display = 'block';
+                successSound.play(); // Play success sound
+
+                // Money rain effect
+                const moneyImageUrl = 'https://i.imgur.com/JWYj2eQ.png';
+                for (let i = 0; i < 20; i++) {
+                    const money = document.createElement('img');
+                    money.src = moneyImageUrl;
+                    money.alt = 'Money';
+                    money.className = 'money';
+                    money.style.left = `${Math.random() * window.innerWidth}px`;
+                    money.style.animationDelay = `${Math.random() * 3}s`;
+                    document.body.appendChild(money);
+                    money.addEventListener('animationend', () => money.remove());
+                }
+            } else {
+                resultText.innerText = "Please fill in all fields.";
+                resultCard.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
+<!-- partial -->
+  <script  src="./script.js"></script>
+
+</body>
+</html>
